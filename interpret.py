@@ -1,8 +1,6 @@
 import sys
 import argparse as ap
 import xml.etree.ElementTree as ET
-from libs.instruction import Instruction
-from libs.variable import Variable
 from libs.utils import *
 from libs.factory import Factory
 

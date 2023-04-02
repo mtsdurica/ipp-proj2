@@ -8,12 +8,9 @@ class Defvar(Instruction):
         super().__init__(order, 'DEFVAR')
 
     def execute(self, GF_vars: dict, TF_vars: dict, LF_stack: list, instructions: list, labels: dict, input_file_flag: int, args, processed_instr):
-        var_id, var_frame, var_type = get_var(self.get_args()[0].get_val())
+        var_id, var_frame, _ = get_var(self.get_args()[0].get_val())
         var_obj = Variable(var_id)
-        match var_frame:
-            case 'GF':
-                GF_vars.update({var_obj.get_id(): var_obj})
-            case 'TF':
-                TF_vars.update({var_obj.get_id(): var_obj})
-            case 'LF':
-                update_on_stack(LF_stack, var_obj.get_id(), var_obj)
+        check = get_from_frame(var_frame, var_id,  GF_vars, TF_vars, LF_stack)
+        if check:
+            exit(52)
+        update_in_frame(var_frame, var_id, var_obj, GF_vars, TF_vars, LF_stack)

@@ -42,12 +42,12 @@ def get_var(var: str) -> list:
 
     Return a list with id, frame, type in this order.
     """
-    return [var[3:], var[:2], 'var']
+    return [var[3:].to_upper(), var[:2], 'var']
 
 
 def get_from_stack(stack: list, query: str) -> dict:
     """
-    Find var in topmost frame in stack
+    Find var in topmost frame on stack
     """
     tmp = stack.pop()
     ret = tmp.get(query)
@@ -55,13 +55,19 @@ def get_from_stack(stack: list, query: str) -> dict:
     return ret
 
 
-def update_on_stack(stack: list, query: str, val: Variable):
+def update_on_stack(stack: list, query: str, updated_obj: Variable):
+    """
+    Update var in topmost frame on stack
+    """
     tmp = stack.pop()
-    tmp.update({query: val})
+    tmp.update({query: updated_obj})
     stack.append(tmp)
 
 
 def get_from_frame(frame: str, query: str, GF: dict, TF: dict, LF: list):
+    """
+    Find var in frame
+    """
     match frame:
         case 'GF':
             return GF.get(query)
@@ -71,7 +77,23 @@ def get_from_frame(frame: str, query: str, GF: dict, TF: dict, LF: list):
             return get_from_stack(LF, query)
 
 
+def update_in_frame(frame: str, query: str, updated_obj: Variable, GF: dict, TF: dict, LF: list):
+    """
+    Update var in frame
+    """
+    match frame:
+        case 'GF':
+            GF.update({query: updated_obj})
+        case 'TF':
+            TF.update({query: updated_obj})
+        case 'LF':
+            update_on_stack(LF, query, updated_obj)
+
+
 def find_label(instructions: list, jump_label: str, jump_instr_order: int, labels: dict):
+    """
+    Find processed and unprocessed label
+    """
     # trying to get label from labels dict,
     # if not found the rest of the instructions will be checked until it is found
     if labels.get(jump_label, 'NotFound') == 'NotFound':
