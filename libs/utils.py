@@ -68,3 +68,27 @@ def get_from_frame(frame: str, query: str, GF: dict, TF: dict, LF: list):
             return TF.get(query)
         case 'LF':
             return get_from_stack(LF, query)
+
+
+def find_label(instructions: list, jump_label: str, jump_instr_order: int, labels: dict):
+    # trying to get label from labels dict,
+    # if not found the rest of the instructions will be checked until it is found
+    if labels.get(jump_label, 'NotFound') == 'NotFound':
+        found_label = ''
+        # searching in intructions list from the index of the jump instruction
+        # no need to search from the first index, since that would mean the label is already in labels dict
+        # and therefore would be found
+        for checked in instructions[jump_instr_order:]:
+            checked_val = checked.get_args()[0].get_val()
+            checked_opcode = checked.get_opcode()
+            if checked_val == jump_label and checked_opcode == 'LABEL':
+                found_label = checked_val
+                found_order = checked.get_order()
+                break
+        if not found_label:
+            # TODO: proper error handling
+            exit('solim')
+        else:
+            # updating labels dict with found label
+            labels.update({found_label: found_order})
+    return labels.get(jump_label)
