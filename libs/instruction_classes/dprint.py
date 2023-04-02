@@ -15,6 +15,8 @@ class Dprint(Instruction):
             case 'var':
                 out = get_from_frame(symb_frame, symb_val,
                                      GF_vars, TF_vars, LF_stack)
+                check_var(symb_frame, symb_val, out.get_type(),
+                          GF_vars, TF_vars, LF_stack)
                 if out.get_type() == 'string':
                     print(parse_esc_seq(out.get_val()),
                           end='', file=sys.stderr)

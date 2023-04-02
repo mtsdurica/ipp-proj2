@@ -4,14 +4,17 @@ from .instruction_classes.createframe import Createframe
 from .instruction_classes.defvar import Defvar
 from .instruction_classes.dprint import Dprint
 from .instruction_classes.exit import Exit
+from .instruction_classes.idiv import Idiv
 from .instruction_classes.jump import Jump
 from .instruction_classes.jumpifeq import Jumpifeq
 from .instruction_classes.jumpifneq import Jumpifneq
 from .instruction_classes.label import Label
 from .instruction_classes.move import Move
+from .instruction_classes.mul import Mul
 from .instruction_classes.popframe import Popframe
 from .instruction_classes.pushframe import Pushframe
 from .instruction_classes.read import Read
+from .instruction_classes.sub import Sub
 from .instruction_classes.write import Write
 
 
@@ -66,9 +69,9 @@ class Factory:
             case 'ADD':
                 return Add(order)
             case 'SUB':
-                pass
+                return Sub(order)
             case 'MUL':
-                pass
+                return Mul(order)
             case 'EQ':
                 pass
             case 'LT':
@@ -88,4 +91,4 @@ class Factory:
             case 'OR':
                 pass
             case 'IDIV':
-                pass
+                return Idiv(order)

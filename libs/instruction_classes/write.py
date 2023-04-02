@@ -10,10 +10,13 @@ class Write(Instruction):
         symb_val, symb_frame, symb_type = get_symb(
             self.get_args()[0].get_type(), self.get_args()[0].get_val()
         )
+
         match symb_type:
             case 'var':
                 out = get_from_frame(symb_frame, symb_val,
                                      GF_vars, TF_vars, LF_stack)
+                check_var(symb_frame, symb_val, out.get_type(),
+                          GF_vars, TF_vars, LF_stack)
                 if out.get_type() == 'string':
                     print(parse_esc_seq(out.get_val()), end='')
                 else:

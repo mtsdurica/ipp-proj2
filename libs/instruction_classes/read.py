@@ -8,6 +8,7 @@ class Read(Instruction):
 
     def execute(self, GF_vars: dict, TF_vars: dict, LF_stack: list, instructions: list, labels: dict, input_file_flag: int, args, processed_instr):
         var_id, var_frame, _ = get_var(self.get_args()[0].get_val())
+        check_var(var_frame, var_id, None, GF_vars, TF_vars, LF_stack)
         read_type = self.get_args()[1].get_val()
 
         if not input_file_flag:

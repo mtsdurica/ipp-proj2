@@ -29,4 +29,4 @@ class Jumpifeq(Instruction):
             label = find_label(
                 instructions, j_label_id, j_order, labels)
             # returning iterator with the new value to correctly jump
-            return iter(instructions[label-1:])
+            return iter(instructions[label:])

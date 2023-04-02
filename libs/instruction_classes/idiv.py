@@ -2,9 +2,9 @@ from ..instruction import Instruction
 from ..utils import *
 
 
-class Add(Instruction):
+class Idiv(Instruction):
     def __init__(self, order):
-        super().__init__(order, 'ADD')
+        super().__init__(order, 'IDIV')
 
     def execute(self, GF_vars: dict, TF_vars: dict, LF_stack: list, instructions: list, labels: dict, input_file_flag: int, args, processed_instr):
         var_id, var_frame, var_type = get_var(self.get_args()[0].get_val())
@@ -27,9 +27,10 @@ class Add(Instruction):
                       GF_vars, TF_vars, LF_stack)
             symb2_type = tmp.get_type()
             symb2_val = tmp.get_val()
-
         if symb1_type == 'int' and symb2_type == 'int':
-            sum = symb1_val + symb2_val
+            if symb2_val == 0:
+                exit(57)
+            sum = symb1_val // symb2_val
             updated = get_from_frame(
                 var_frame, var_id, GF_vars, TF_vars, LF_stack)
             updated.set_val(sum)

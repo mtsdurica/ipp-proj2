@@ -42,7 +42,7 @@ def get_var(var: str) -> list:
 
     Return a list with id, frame, type in this order.
     """
-    return [var[3:].to_upper(), var[:2], 'var']
+    return [var[3:], var[:2].upper(), 'var']
 
 
 def get_from_stack(stack: list, query: str) -> dict:
@@ -53,6 +53,17 @@ def get_from_stack(stack: list, query: str) -> dict:
     ret = tmp.get(query)
     stack.append(tmp)
     return ret
+
+
+def check_var(frame: str, query: str, var_type: str, GF: dict, TF: dict, LF: list):
+    """
+    Check if var exists and check if var is initialized
+    """
+    if var_type != None and var_type == 'var':
+        exit(56)
+    checked = get_from_frame(frame, query, GF, TF, LF)
+    if not checked:
+        exit(54)
 
 
 def update_on_stack(stack: list, query: str, updated_obj: Variable):
