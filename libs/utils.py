@@ -1,5 +1,5 @@
 import re
-from libs.variable import variable
+from libs.variable import Variable
 
 
 def parse_esc_seq(input: str) -> str:
@@ -32,7 +32,8 @@ def get_symb(symb_type: str, symb_val: str) -> list:
             return [int(symb_val), None, symb_type]
         case 'bool':
             return [symb_val, None, symb_type]
-        # TODO: add nil support
+        case 'nil':
+            return ['', None, symb_type]
 
 
 def get_var(var: str) -> list:
@@ -54,7 +55,7 @@ def get_from_stack(stack: list, query: str) -> dict:
     return ret
 
 
-def update_on_stack(stack: list, query: str, val: variable):
+def update_on_stack(stack: list, query: str, val: Variable):
     tmp = stack.pop()
     tmp.update({query: val})
     stack.append(tmp)

@@ -1,4 +1,4 @@
-class argument:
+class Argument:
     def __init__(self, arg_type, arg_val):
         self._type = arg_type
         self._val = arg_val
