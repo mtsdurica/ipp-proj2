@@ -1,9 +1,9 @@
 from ..instruction import *
 
 
-class Add(Instruction):
+class Concat(Instruction):
     def __init__(self, order):
-        super().__init__(order, 'ADD')
+        super().__init__(order, 'CONCAT')
 
     def check_num_of_args(self):
         if len(self._args) != 3:
@@ -17,6 +17,7 @@ class Add(Instruction):
             self.get_args()[1].get_type(), self.get_args()[1].get_val())
         symb2_val, symb2_frame, symb2_type = get_symb(
             self.get_args()[2].get_type(), self.get_args()[2].get_val())
+
         if symb1_type == 'var':
             tmp = get_from_frame(
                 symb1_frame, symb1_val, GF_vars, TF_vars, LF_stack)
@@ -39,12 +40,12 @@ class Add(Instruction):
             symb2_type = tmp.get_type()
             symb2_val = tmp.get_val()
 
-        if symb1_type == 'int' and symb2_type == 'int':
+        if symb1_type == 'string' and symb2_type == 'string':
             sum = symb1_val + symb2_val
             updated = get_from_frame(
                 var_frame, var_id, GF_vars, TF_vars, LF_stack)
             updated.set_val(sum)
-            updated.set_type('int')
+            updated.set_type('string')
             update_in_frame(
                 var_frame, var_id, updated, GF_vars, TF_vars, LF_stack)
         else:

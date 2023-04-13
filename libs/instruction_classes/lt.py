@@ -18,9 +18,13 @@ class Lt(Instruction):
             self.get_args()[1].get_type(), self.get_args()[1].get_val())
         symb2_val, symb2_frame, symb2_type = get_symb(
             self.get_args()[2].get_type(), self.get_args()[2].get_val())
+        check_var(var_frame, var_id, var_type, GF_vars, TF_vars, LF_stack)
         if symb1_type == 'var':
             tmp = get_from_frame(
                 symb1_frame, symb1_val, GF_vars, TF_vars, LF_stack)
+            if not tmp.get_type():
+                errprint('uninit var')
+                exit(56)
             check_var(symb1_frame, symb1_val, tmp.get_type(),
                       GF_vars, TF_vars, LF_stack)
             symb1_type = tmp.get_type()
@@ -29,6 +33,9 @@ class Lt(Instruction):
         if symb2_type == 'var':
             tmp = get_from_frame(
                 symb2_frame, symb2_val, GF_vars, TF_vars, LF_stack)
+            if not tmp.get_type():
+                errprint('uninit var')
+                exit(56)
             check_var(symb2_frame, symb2_val, tmp.get_type(),
                       GF_vars, TF_vars, LF_stack)
             symb2_type = tmp.get_type()
@@ -46,7 +53,7 @@ class Lt(Instruction):
                 else:
                     result = 'false'
         else:
-            errprint('ERROR: Operands must be of the same type!')
+            errprint('Operands must be of the same type!')
             exit(53)
         updated = get_from_frame(
             var_frame, var_id, GF_vars, TF_vars, LF_stack)

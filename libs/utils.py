@@ -65,7 +65,11 @@ def get_from_stack(stack: list, query: str) -> dict:
     """
     Find var in topmost frame on stack
     """
-    popped = stack.pop()
+    try:
+        popped = stack.pop()
+    except IndexError:
+        errprint('Popping from empty LF stack attempted!')
+        exit(55)
     ret = popped.get(query)
     stack.append(popped)
     return ret
@@ -75,8 +79,6 @@ def check_var(frame: str, query: str, var_type: str, GF: dict, TF: dict, LF: lis
     """
     Check if var exists and check if var is initialized
     """
-    # if var_type != None and var_type == 'var':
-    #   exit(56)
     checked = get_from_frame(frame, query, GF, TF, LF)
     if not checked:
         exit(54)
@@ -97,10 +99,17 @@ def get_from_frame(frame: str, query: str, GF: dict, TF: dict, LF: list):
     """
     match frame:
         case 'GF':
+            if not GF.get(query):
+                errprint('Accessing undefined variable attempted!')
+                exit(54)
             return GF.get(query)
         case 'TF':
+            if not TF.get(query):
+                exit(55)
             return TF.get(query)
         case 'LF':
+            if not get_from_stack(LF, query):
+                exit(54)
             return get_from_stack(LF, query)
 
 

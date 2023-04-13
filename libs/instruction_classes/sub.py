@@ -24,6 +24,9 @@ class Sub(Instruction):
         if symb1_type == 'var':
             tmp = get_from_frame(
                 symb1_frame, symb1_val, GF_vars, TF_vars, LF_stack)
+            if not tmp.get_type():
+                errprint('uninit var')
+                exit(56)
             check_var(symb1_frame, symb1_val, tmp.get_type(),
                       GF_vars, TF_vars, LF_stack)
             symb1_type = tmp.get_type()
@@ -32,6 +35,9 @@ class Sub(Instruction):
         if symb2_type == 'var':
             tmp = get_from_frame(
                 symb2_frame, symb2_val, GF_vars, TF_vars, LF_stack)
+            if not tmp.get_type():
+                errprint('uninit var')
+                exit(56)
             check_var(symb2_frame, symb2_val, tmp.get_type(),
                       GF_vars, TF_vars, LF_stack)
             symb2_type = tmp.get_type()

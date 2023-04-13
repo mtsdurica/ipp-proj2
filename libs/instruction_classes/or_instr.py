@@ -1,9 +1,9 @@
 from ..instruction import *
 
 
-class Add(Instruction):
+class Or(Instruction):
     def __init__(self, order):
-        super().__init__(order, 'ADD')
+        super().__init__(order, 'OR')
 
     def check_num_of_args(self):
         if len(self._args) != 3:
@@ -39,14 +39,17 @@ class Add(Instruction):
             symb2_type = tmp.get_type()
             symb2_val = tmp.get_val()
 
-        if symb1_type == 'int' and symb2_type == 'int':
-            sum = symb1_val + symb2_val
+        if symb1_type == 'bool' and symb2_type == 'bool':
+            if symb1_val == 'true' or symb2_val == 'true':
+                new = 'true'
+            else:
+                new = 'false'
             updated = get_from_frame(
                 var_frame, var_id, GF_vars, TF_vars, LF_stack)
-            updated.set_val(sum)
-            updated.set_type('int')
+            updated.set_val(new)
+            updated.set_type('bool')
             update_in_frame(
                 var_frame, var_id, updated, GF_vars, TF_vars, LF_stack)
         else:
-            errprint('Addition of other types attempted!')
+            errprint('Or of incorrect types attempted!')
             exit(53)

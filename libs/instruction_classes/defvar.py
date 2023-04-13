@@ -16,8 +16,18 @@ class Defvar(Instruction):
         self.check_num_of_args()
         var_id, var_frame, _ = get_var(self.get_args()[0].get_val())
         var_obj = Variable(var_id)
-        if get_from_frame(var_frame, var_id,  GF_vars, TF_vars, LF_stack):
-            exit(52)
+
+        match var_frame:
+            case 'GF':
+                if GF_vars.get(var_id):
+                    exit(52)
+            case 'TF':
+                if TF_vars.get(var_id):
+                    exit(52)
+            case 'LF':
+                if get_from_stack(LF_stack, var_id):
+                    exit(52)
+
         if var_frame == 'TF' and not TF_created_flag:
             errprint('Creating variable on not existing frame attempted!')
             exit(55)

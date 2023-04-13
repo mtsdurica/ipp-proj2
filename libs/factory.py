@@ -24,6 +24,15 @@ from .instruction_classes.eq import Eq
 from .instruction_classes.pushs import Pushs
 from .instruction_classes.pops import Pops
 from .instruction_classes.type import Type
+from .instruction_classes.int2char import Int2char
+from .instruction_classes.stri2int import Stri2int
+from .instruction_classes.concat import Concat
+from .instruction_classes.strlen import Strlen
+from .instruction_classes.getchar import Getchar
+from .instruction_classes.setchar import Setchar
+from .instruction_classes.or_instr import Or
+from .instruction_classes.and_instr import And
+from .instruction_classes.not_instr import Not
 from .utils import *
 
 
@@ -35,13 +44,13 @@ class Factory:
             exit(32)
         match opcode.upper():
             case 'NOT':
-                pass
+                return Not(order)
             case 'TYPE':
                 return Type(order)
             case 'INT2CHAR':
-                pass
+                return Int2char(order)
             case 'STRLEN':
-                pass
+                return Strlen(order)
             case 'MOVE':
                 return Move(order)
             case 'CREATEFRAME':
@@ -91,17 +100,17 @@ class Factory:
             case 'GT':
                 return Gt(order)
             case 'AND':
-                pass
+                return And(order)
             case 'STRI2INT':
-                pass
+                return Stri2int(order)
             case 'CONCAT':
-                pass
+                return Concat(order)
             case 'GETCHAR':
-                pass
+                return Getchar(order)
             case 'SETCHAR':
-                pass
+                return Setchar(order)
             case 'OR':
-                pass
+                return Or(order)
             case 'IDIV':
                 return Idiv(order)
             case _:

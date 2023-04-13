@@ -1,12 +1,12 @@
 from ..instruction import *
 
 
-class Add(Instruction):
+class Not(Instruction):
     def __init__(self, order):
-        super().__init__(order, 'ADD')
+        super().__init__(order, 'NOT')
 
     def check_num_of_args(self):
-        if len(self._args) != 3:
+        if len(self._args) != 2:
             errprint('Undefined amount of arguments in instruction!')
             exit(32)
 
@@ -28,25 +28,17 @@ class Add(Instruction):
             symb1_type = tmp.get_type()
             symb1_val = tmp.get_val()
 
-        if symb2_type == 'var':
-            tmp = get_from_frame(
-                symb2_frame, symb2_val, GF_vars, TF_vars, LF_stack)
-            if not tmp.get_type():
-                errprint('uninit var')
-                exit(56)
-            check_var(symb2_frame, symb2_val, tmp.get_type(),
-                      GF_vars, TF_vars, LF_stack)
-            symb2_type = tmp.get_type()
-            symb2_val = tmp.get_val()
-
-        if symb1_type == 'int' and symb2_type == 'int':
-            sum = symb1_val + symb2_val
+        if symb1_type == 'bool':
+            if symb1_val == 'true':
+                new = 'false'
+            else:
+                new = 'new'
             updated = get_from_frame(
                 var_frame, var_id, GF_vars, TF_vars, LF_stack)
-            updated.set_val(sum)
-            updated.set_type('int')
+            updated.set_val(new)
+            updated.set_type('bool')
             update_in_frame(
                 var_frame, var_id, updated, GF_vars, TF_vars, LF_stack)
         else:
-            errprint('Addition of other types attempted!')
+            errprint('Not of incorrect type attempted!')
             exit(53)
