@@ -6,7 +6,13 @@ class Jumpifneq(Instruction):
     def __init__(self, order):
         super().__init__(order, 'JUMPIFNEQ')
 
-    def execute(self, GF_vars: dict, TF_vars: dict, LF_stack: list, instructions: list, labels: dict, input_file_flag: int, args, processed_instr):
+    def check_num_of_args(self):
+        if len(self._args) != 3:
+            errprint('Undefined amount of arguments in instruction!')
+            exit(32)
+
+    def execute(self, GF_vars: dict, TF_vars: dict, LF_stack: list, instructions: list, labels: dict, input_file_flag: int, TF_created_flag: int, args, processed_instr, stack, ds):
+        self.check_num_of_args()
         j_label_id = self.get_args()[0].get_val()
         j_order = self.get_order()
         symb1_val, symb1_frame, symb1_type = get_symb(

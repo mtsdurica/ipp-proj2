@@ -16,16 +16,28 @@ from .instruction_classes.pushframe import Pushframe
 from .instruction_classes.read import Read
 from .instruction_classes.sub import Sub
 from .instruction_classes.write import Write
+from .instruction_classes.call import Call
+from .instruction_classes.return_instr import Return
+from .instruction_classes.lt import Lt
+from .instruction_classes.gt import Gt
+from .instruction_classes.eq import Eq
+from .instruction_classes.pushs import Pushs
+from .instruction_classes.pops import Pops
+from .instruction_classes.type import Type
+from .utils import *
 
 
 class Factory:
     @classmethod
     def create(cls, opcode: str, order: int):
+        if not re.match(r'^\d+$', str(order)):
+            errprint('Bad order!')
+            exit(32)
         match opcode.upper():
             case 'NOT':
                 pass
             case 'TYPE':
-                pass
+                return Type(order)
             case 'INT2CHAR':
                 pass
             case 'STRLEN':
@@ -39,15 +51,15 @@ class Factory:
             case 'POPFRAME':
                 return Popframe(order)
             case 'RETURN':
-                pass
+                return Return(order)
             case 'BREAK':
                 return Break(order)
             case 'POPS':
-                pass
+                return Pops(order)
             case 'DEFVAR':
                 return Defvar(order)
             case 'PUSHS':
-                pass
+                return Pushs(order)
             case 'DPRINT':
                 return Dprint(order)
             case 'EXIT':
@@ -59,7 +71,7 @@ class Factory:
             case 'JUMP':
                 return Jump(order)
             case 'CALL':
-                pass
+                return Call(order)
             case 'JUMPIFEQ':
                 return Jumpifeq(order)
             case 'JUMPIFNEQ':
@@ -73,11 +85,11 @@ class Factory:
             case 'MUL':
                 return Mul(order)
             case 'EQ':
-                pass
+                return Eq(order)
             case 'LT':
-                pass
+                return Lt(order)
             case 'GT':
-                pass
+                return Gt(order)
             case 'AND':
                 pass
             case 'STRI2INT':
@@ -92,3 +104,6 @@ class Factory:
                 pass
             case 'IDIV':
                 return Idiv(order)
+            case _:
+                errprint('Unknown instruction!')
+                exit(32)

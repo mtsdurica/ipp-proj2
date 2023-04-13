@@ -2,9 +2,9 @@ from ..instruction import Instruction
 from ..utils import *
 
 
-class Mul(Instruction):
+class Eq(Instruction):
     def __init__(self, order):
-        super().__init__(order, 'MUL')
+        super().__init__(order, 'EQ')
 
     def check_num_of_args(self):
         if len(self._args) != 3:
@@ -33,14 +33,16 @@ class Mul(Instruction):
                       GF_vars, TF_vars, LF_stack)
             symb2_type = tmp.get_type()
             symb2_val = tmp.get_val()
-        if symb1_type == 'int' and symb2_type == 'int':
-            sum = symb1_val * symb2_val
+
+            if symb1_type == symb2_type:
+                if symb1_val == symb2_val:
+                    result = 'true'
+                else:
+                    result = 'false'
+
             updated = get_from_frame(
                 var_frame, var_id, GF_vars, TF_vars, LF_stack)
-            updated.set_val(sum)
-            updated.set_type('int')
+            updated.set_val(result)
+            updated.set_type('bool')
             update_in_frame(
                 var_frame, var_id, updated, GF_vars, TF_vars, LF_stack)
-        else:
-            errprint('Addition of other types attempted!')
-            exit(53)
