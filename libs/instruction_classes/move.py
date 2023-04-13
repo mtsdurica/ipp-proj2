@@ -17,16 +17,20 @@ class Move(Instruction):
         symb_val, symb_frame, symb_type = get_symb(
             self.get_args()[1].get_type(), self.get_args()[1].get_val()
         )
-        check_var(var_frame, var_id, None, GF_vars, TF_vars, LF_stack)
+        _ = get_from_frame(
+            var_frame, var_id, TF_created_flag, GF_vars, TF_vars, LF_stack)
         if not symb_frame:
             updated = get_from_frame(
-                var_frame, var_id, GF_vars, TF_vars, LF_stack)
+                var_frame, var_id, TF_created_flag, GF_vars, TF_vars, LF_stack)
             updated.set_val(symb_val)
             updated.set_type(symb_type)
         else:
+            _ = get_from_frame(
+                symb_frame, symb_val, TF_created_flag, GF_vars, TF_vars, LF_stack)
             check_var(symb_frame, symb_val, symb_type,
                       GF_vars, TF_vars, LF_stack)
             updated = get_from_frame(
-                symb_frame, symb_val, GF_vars, TF_vars, LF_stack
-            )
+                symb_frame, symb_val, TF_created_flag, GF_vars, TF_vars, LF_stack)
+            if not updated.get_val():
+                exit(56)
         update_in_frame(var_frame, var_id, updated, GF_vars, TF_vars, LF_stack)

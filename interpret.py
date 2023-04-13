@@ -68,8 +68,15 @@ if __name__ == '__main__':
 
         for arg in node:
             if re.match(r'^arg[\d]+$', arg.tag):
+                if arg.attrib.get('type') == 'string':
+                    if not arg.text:
+                        arg_text = ''
+                    else:
+                        arg_text = parse_esc_seq(str(arg.text))
+                else:
+                    arg_text = arg.text
                 instr.add_arg(arg.attrib.get('type'),
-                              arg.text.strip(), arg.tag)
+                              arg_text, arg.tag)
             else:
                 errprint('Bad argument tag!')
                 exit(32)

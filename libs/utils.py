@@ -75,11 +75,11 @@ def get_from_stack(stack: list, query: str) -> dict:
     return ret
 
 
-def check_var(frame: str, query: str, var_type: str, GF: dict, TF: dict, LF: list):
+def check_var(frame: str, query: str, TF_created_flag, GF: dict, TF: dict, LF: list):
     """
     Check if var exists and check if var is initialized
     """
-    checked = get_from_frame(frame, query, GF, TF, LF)
+    checked = get_from_frame(frame, query, TF_created_flag, GF, TF, LF)
     if not checked:
         exit(54)
 
@@ -93,7 +93,7 @@ def update_on_stack(stack: list, query: str, updated_obj: Variable):
     stack.append(tmp)
 
 
-def get_from_frame(frame: str, query: str, GF: dict, TF: dict, LF: list):
+def get_from_frame(frame: str, query: str, TF_created_flag, GF: dict, TF: dict, LF: list):
     """
     Find var in frame
     """
@@ -104,8 +104,12 @@ def get_from_frame(frame: str, query: str, GF: dict, TF: dict, LF: list):
                 exit(54)
             return GF.get(query)
         case 'TF':
-            if not TF.get(query):
+            if TF_created_flag == 0:
+                errprint('Accessing undefined TF attempted!')
                 exit(55)
+            if not TF.get(query) and TF_created_flag == 1:
+                errprint('Accessing undefined variable attempted!')
+                exit(54)
             return TF.get(query)
         case 'LF':
             if not get_from_stack(LF, query):

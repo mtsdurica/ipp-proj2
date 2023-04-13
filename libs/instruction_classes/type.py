@@ -19,14 +19,14 @@ class Type(Instruction):
 
         if symb1_type == 'var':
             tmp = get_from_frame(
-                symb1_frame, symb1_val, GF_vars, TF_vars, LF_stack)
-            check_var(symb1_frame, symb1_val, tmp.get_type(),
+                symb1_frame, symb1_val, TF_created_flag, GF_vars, TF_vars, LF_stack)
+            check_var(symb1_frame, symb1_val, TF_created_flag,
                       GF_vars, TF_vars, LF_stack)
             symb1_type = tmp.get_type()
             symb1_val = tmp.get_val()
 
         updated = get_from_frame(
-            var_frame, var_id, GF_vars, TF_vars, LF_stack)
+            var_frame, var_id, TF_created_flag, GF_vars, TF_vars, LF_stack)
         if not symb1_type:
             symb1_type = ''
         updated.set_val(symb1_type)

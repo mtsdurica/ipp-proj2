@@ -22,21 +22,27 @@ class Jumpifeq(Instruction):
         # getting type and value of symbols if they are variables
         if symb1_type == 'var':
             tmp = get_from_frame(
-                symb1_frame, symb1_val, GF_vars, TF_vars, LF_stack)
+                symb1_frame, symb1_val, TF_created_flag, GF_vars, TF_vars, LF_stack)
+            if not tmp.get_type():
+                errprint('uninit var')
+                exit(56)
             symb1_type = tmp.get_type()
             symb1_val = tmp.get_val()
 
         if symb2_type == 'var':
             tmp = get_from_frame(
-                symb2_frame, symb2_val, GF_vars, TF_vars, LF_stack)
+                symb2_frame, symb2_val, TF_created_flag, GF_vars, TF_vars, LF_stack)
+            if not tmp.get_type():
+                errprint('uninit var')
+                exit(56)
             symb2_type = tmp.get_type()
             symb2_val = tmp.get_val()
-        # TODO: add null
-        if symb1_type == symb2_type:
+
+        if symb1_type == symb2_type or symb1_type == 'nil' or symb2_type == 'nil':
+            label = find_label(
+                instructions, j_label_id, j_order, labels)
+            # returning iterator with the new value to correctly jump
             if symb1_val == symb2_val:
-                label = find_label(
-                    instructions, j_label_id, j_order, labels)
-                # returning iterator with the new value to correctly jump
                 return iter(instructions[label:])
         else:
             errprint('Operands not of the same type!')

@@ -18,7 +18,7 @@ class Write(Instruction):
 
         match symb_type:
             case 'var':
-                out = get_from_frame(symb_frame, symb_val,
+                out = get_from_frame(symb_frame, symb_val, TF_created_flag,
                                      GF_vars, TF_vars, LF_stack)
                 if not out:
                     errprint('Attempted to read undefined variable!')

@@ -18,14 +18,15 @@ class Gt(Instruction):
             self.get_args()[1].get_type(), self.get_args()[1].get_val())
         symb2_val, symb2_frame, symb2_type = get_symb(
             self.get_args()[2].get_type(), self.get_args()[2].get_val())
-        check_var(var_frame, var_id, var_type, GF_vars, TF_vars, LF_stack)
+        check_var(var_frame, var_id, TF_created_flag,
+                  GF_vars, TF_vars, LF_stack)
         if symb1_type == 'var':
             tmp = get_from_frame(
-                symb1_frame, symb1_val, GF_vars, TF_vars, LF_stack)
+                symb1_frame, symb1_val, TF_created_flag, GF_vars, TF_vars, LF_stack)
             if not tmp.get_type():
                 errprint('uninit var')
                 exit(56)
-            check_var(symb1_frame, symb1_val, tmp.get_type(),
+            check_var(symb1_frame, symb1_val, TF_created_flag,
                       GF_vars, TF_vars, LF_stack)
 
             symb1_type = tmp.get_type()
@@ -33,16 +34,16 @@ class Gt(Instruction):
 
         if symb2_type == 'var':
             tmp = get_from_frame(
-                symb2_frame, symb2_val, GF_vars, TF_vars, LF_stack)
+                symb2_frame, symb2_val, TF_created_flag, GF_vars, TF_vars, LF_stack)
             if not tmp.get_type():
                 errprint('uninit var')
                 exit(56)
-            check_var(symb2_frame, symb2_val, tmp.get_type(),
+            check_var(symb2_frame, symb2_val, TF_created_flag,
                       GF_vars, TF_vars, LF_stack)
             symb2_type = tmp.get_type()
             symb2_val = tmp.get_val()
 
-        if symb1_type == symb2_type:
+        if symb1_type == symb2_type and symb1_type != 'nil':
 
             if symb2_type != 'bool':
                 if symb1_val > symb2_val:
@@ -55,10 +56,10 @@ class Gt(Instruction):
                 else:
                     result = 'false'
         else:
-            errprint('Operands must be of the same type!')
+            errprint('Operands must be of the same type and not nil! ')
             exit(53)
         updated = get_from_frame(
-            var_frame, var_id, GF_vars, TF_vars, LF_stack)
+            var_frame, var_id, TF_created_flag, GF_vars, TF_vars, LF_stack)
         updated.set_val(result)
         updated.set_type('bool')
         update_in_frame(

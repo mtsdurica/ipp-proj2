@@ -15,15 +15,14 @@ class Not(Instruction):
         var_id, var_frame, var_type = get_var(self.get_args()[0].get_val())
         symb1_val, symb1_frame, symb1_type = get_symb(
             self.get_args()[1].get_type(), self.get_args()[1].get_val())
-        symb2_val, symb2_frame, symb2_type = get_symb(
-            self.get_args()[2].get_type(), self.get_args()[2].get_val())
+
         if symb1_type == 'var':
             tmp = get_from_frame(
-                symb1_frame, symb1_val, GF_vars, TF_vars, LF_stack)
+                symb1_frame, symb1_val, TF_created_flag, GF_vars, TF_vars, LF_stack)
             if not tmp.get_type():
                 errprint('uninit var')
                 exit(56)
-            check_var(symb1_frame, symb1_val, tmp.get_type(),
+            check_var(symb1_frame, symb1_val, TF_created_flag,
                       GF_vars, TF_vars, LF_stack)
             symb1_type = tmp.get_type()
             symb1_val = tmp.get_val()
@@ -32,9 +31,9 @@ class Not(Instruction):
             if symb1_val == 'true':
                 new = 'false'
             else:
-                new = 'new'
+                new = 'true'
             updated = get_from_frame(
-                var_frame, var_id, GF_vars, TF_vars, LF_stack)
+                var_frame, var_id, TF_created_flag, GF_vars, TF_vars, LF_stack)
             updated.set_val(new)
             updated.set_type('bool')
             update_in_frame(

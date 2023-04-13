@@ -19,7 +19,7 @@ class Pushs(Instruction):
 
         match symb_type:
             case 'var':
-                out = get_from_frame(symb_frame, symb_val,
+                out = get_from_frame(symb_frame, symb_val, TF_created_flag,
                                      GF_vars, TF_vars, LF_stack)
                 check_var(symb_frame, symb_val, out.get_type(),
                           GF_vars, TF_vars, LF_stack)

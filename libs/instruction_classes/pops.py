@@ -19,7 +19,7 @@ class Pops(Instruction):
         else:
             var_id, var_frame, var_type = get_var(self.get_args()[0].get_val())
             updated = get_from_frame(
-                var_frame, var_id, GF_vars, TF_vars, LF_stack)
+                var_frame, var_id, TF_created_flag, GF_vars, TF_vars, LF_stack)
             popped = ds.pop()
             tmp = popped.popitem()
             updated_val = tmp[0]
