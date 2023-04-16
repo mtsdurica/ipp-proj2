@@ -48,11 +48,12 @@ class Getchar(Instruction):
         if symb1_type == 'string' and symb2_type == 'int':
             try:
                 if int(symb2_val) >= 0:
-
                     updated = get_from_frame(
                         var_frame, var_id, TF_created_flag, GF_vars, TF_vars, LF_stack)
                     updated.set_val(str(symb1_val[symb2_val]))
                     updated.set_type('string')
+                else:
+                    exit(58)
             except IndexError:
                 errprint('Out of range!')
                 exit(58)

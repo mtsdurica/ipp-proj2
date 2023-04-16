@@ -14,7 +14,8 @@ class Setchar(Instruction):
     def execute(self, GF_vars: dict, TF_vars: dict, LF_stack: list, instructions: list, labels: dict, input_file_flag: int, TF_created_flag: int, args, processed_instr, stack, ds):
         self.check_num_of_args()
         var_id, var_frame, var_type = get_var(self.get_args()[0].get_val())
-        check_var(var_frame, var_id, None, GF_vars, TF_vars, LF_stack)
+        check_var(var_frame, var_id, TF_created_flag,
+                  GF_vars, TF_vars, LF_stack)
 
         symb1_val, symb1_frame, symb1_type = get_symb(
             self.get_args()[1].get_type(), self.get_args()[1].get_val())
@@ -54,10 +55,15 @@ class Setchar(Instruction):
                     updated = get_from_frame(
                         var_frame, var_id, TF_created_flag, GF_vars, TF_vars, LF_stack)
                     updated_val = updated.get_val()
+                    if int(symb1_val) > len(updated_val)-1:
+                        errprint('Out of range!')
+                        exit(58)
                     updated_val = updated_val[:symb1_val] + \
                         symb2_val[0] + updated_val[symb1_val+1:]
                     updated.set_val(updated_val)
                     updated.set_type('string')
+                else:
+                    exit(58)
             except IndexError:
                 errprint('Out of range!')
                 exit(58)
