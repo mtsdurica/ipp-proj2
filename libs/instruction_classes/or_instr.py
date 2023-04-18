@@ -1,3 +1,8 @@
+"""
+Author: Matúš Ďurica (xduric06)
+"""
+
+
 from ..instruction import *
 
 

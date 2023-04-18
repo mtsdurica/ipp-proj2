@@ -1,3 +1,8 @@
+"""
+Author: Matúš Ďurica (xduric06)
+"""
+
+
 import sys
 import argparse as ap
 import xml.etree.ElementTree as ET
@@ -26,8 +31,8 @@ if __name__ == '__main__':
     args = arg_parser.parse_args()
 
     if not args.source and not args.input:
-        # add correct error code
-        exit('Zabudol si subor ty gazda')
+        errprint('At least one file has to be specified')
+        exit(10)
 
     if args.input:
         input_file_flag = 1
@@ -85,37 +90,39 @@ if __name__ == '__main__':
                 errprint('Bad argument order!')
                 exit(32)
 
+    # sorting by order
     instructions = sorted(instructions, key=lambda x: x.get_order())
-    ind = 1
+
+    # changing order to increments of 1; easier implementation of jumps
+    index = 1
     last = 0
     for i in instructions:
         if i.get_order() == last:
             errprint('Duplicit order!')
             exit(32)
-        i.set_order(ind)
+        i.set_order(index)
         last = i.get_order()
-        ind += 1
+        index += 1
 
+    # main interpretting loop
     iterator_obj = iter(instructions)
-    # print(instructions[0])
     while True:
         try:
             current_instruction = next(iterator_obj)
         except StopIteration:
             break
-        # print(current_instruction.get_opcode(),
-        #      current_instruction.get_order())
+
         tmp = iterator_obj
 
-        if current_instruction.get_opcode() == 'JUMP' or current_instruction.get_opcode() == 'JUMPIFNEQ' or current_instruction.get_opcode() == 'JUMPIFEQ' or current_instruction.get_opcode() == 'CALL' or current_instruction.get_opcode() == 'RETURN':
-            iterator_obj = current_instruction.execute(GF_vars, TF_vars, LF_stack, instructions,
-                                                       labels, input_file_flag, TF_created_flag, args, current_instruction, call_stack, data_stack)
-            if not iterator_obj:
-                iterator_obj = tmp
-                # print('ahoj')
-        elif current_instruction.get_opcode() == 'CREATEFRAME' or current_instruction.get_opcode() == 'PUSHFRAME':
-            TF_created_flag = current_instruction.execute(GF_vars, TF_vars, LF_stack, instructions,
-                                                          labels, input_file_flag, TF_created_flag, args, current_instruction, call_stack, data_stack)
-        else:
-            current_instruction.execute(GF_vars, TF_vars, LF_stack, instructions,
-                                        labels, input_file_flag, TF_created_flag, args, current_instruction, call_stack, data_stack)
+        match current_instruction.get_opcode():
+            case 'JUMP' | 'JUMPIFEQ' | 'JUMPIFNEQ' | 'CALL' | 'RETURN':
+                iterator_obj = current_instruction.execute(GF_vars, TF_vars, LF_stack, instructions,
+                                                           labels, input_file_flag, TF_created_flag, args, current_instruction, call_stack, data_stack)
+                if not iterator_obj:
+                    iterator_obj = tmp
+            case 'CREATEFRAME' | 'PUSHFRAME':
+                TF_created_flag = current_instruction.execute(GF_vars, TF_vars, LF_stack, instructions,
+                                                              labels, input_file_flag, TF_created_flag, args, current_instruction, call_stack, data_stack)
+            case _:
+                current_instruction.execute(GF_vars, TF_vars, LF_stack, instructions,
+                                            labels, input_file_flag, TF_created_flag, args, current_instruction, call_stack, data_stack)

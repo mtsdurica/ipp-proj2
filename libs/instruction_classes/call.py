@@ -1,4 +1,9 @@
 from ..instruction import Instruction
+"""
+Author: Matúš Ďurica (xduric06)
+"""
+
+
 from ..utils import *
 
 

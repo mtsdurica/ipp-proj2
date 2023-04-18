@@ -1,3 +1,8 @@
+"""
+Author: Matúš Ďurica (xduric06)
+"""
+
+
 import re
 import sys
 from libs.variable import Variable
@@ -13,6 +18,8 @@ def parse_esc_seq(input: str) -> str:
 def conv_to_correct(input: str, type: str) -> str | int:
     """
     Convert read input to correct data type
+
+    @input sdads
     """
     if not input:
         return 'nil'

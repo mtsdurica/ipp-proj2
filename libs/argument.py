@@ -1,3 +1,8 @@
+"""
+Author: Matúš Ďurica (xduric06)
+"""
+
+
 class Argument:
     def __init__(self, arg_type, arg_val, arg_order):
         self._type = arg_type

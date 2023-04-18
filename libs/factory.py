@@ -1,3 +1,8 @@
+"""
+Author: Matúš Ďurica (xduric06)
+"""
+
+
 from .instruction_classes.add import Add
 from .instruction_classes.break_instr import Break
 from .instruction_classes.createframe import Createframe

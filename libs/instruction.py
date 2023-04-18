@@ -1,3 +1,8 @@
+"""
+Author: Matúš Ďurica (xduric06)
+"""
+
+
 from libs.argument import Argument
 from .utils import *
 
@@ -29,3 +34,10 @@ class Instruction:
         if len(self._args) > 0:
             errprint('Too many arguments in instruction!')
             exit(32)
+
+    def execute(self, GF_vars: dict, TF_vars: dict, LF_stack: list, instructions: list, labels: dict, input_file_flag: int, TF_created_flag: int, args, processed_instr, stack, ds):
+        """
+        Mainly forward declaration for overriding, no real functionality provided
+
+        """
+        return

@@ -1,3 +1,8 @@
+"""
+Author: Matúš Ďurica (xduric06)
+"""
+
+
 class Variable:
     def __init__(self, id):
         self._id = id

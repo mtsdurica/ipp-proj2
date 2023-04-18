@@ -1,3 +1,8 @@
+"""
+Author: Matúš Ďurica (xduric06)
+"""
+
+
 from ..instruction import Instruction
 from ..utils import *
 import sys
@@ -27,17 +32,10 @@ class Break(Instruction):
         for var in TF_vars:
             print(var, file=sys.stderr, end=', ')
         print('', file=sys.stderr)
-        print('Variables in Local Frame: ', file=sys.stderr)
-        # TODO: redo
-        # iterator = 0
-        # for frame in LF_stack:
-        #    iterator += 1
-        #    if iterator == 1 and len(LF_stack) != 1:
-        #        print('Function scope variables: ', file=sys.stderr)
-        #    elif len(LF_stack) == 1 and iterator == 1:
-        #        print('Main variables: ', file=sys.stderr)
-        #    for var in frame:
-        #        print(var, file=sys.stderr, end=', ')
-        # print('', file=sys.stderr)
+        print('Variables in topmost Local Frame: ', file=sys.stderr)
+        frame = LF_stack.pop()
+        for var in frame:
+            print(var, file=sys.stderr, end=', ')
+        print('', file=sys.stderr)
         print(
             '################################################################', file=sys.stderr)
