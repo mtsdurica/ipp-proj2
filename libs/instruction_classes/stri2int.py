@@ -55,8 +55,11 @@ class Stri2int(Instruction):
                 if int(symb2_val) >= 0:
                     updated = get_from_frame(
                         var_frame, var_id, TF_created_flag, GF_vars, TF_vars, LF_stack)
-
-                    updated.set_val(ord(str(symb1_val[symb2_val])))
+                    try:
+                        updated.set_val(ord(str(symb1_val[symb2_val])))
+                    except IndexError:
+                        errprint('Out of range!')
+                        exit(58)
                     updated.set_type('int')
                 else:
                     exit(58)
